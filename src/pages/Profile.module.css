@@ -1,0 +1,537 @@
+.page {
+  display: flex;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(45, 65, 80, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(70, 50, 40, 0.4) 0%, transparent 50%),
+    #050608;
+  background-attachment: fixed;
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ===== Sidebar ===== */
+
+.sidebar {
+  width: 85px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 50px;
+  color: #fff;
+}
+
+.navLink {
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 35px;
+  display: block;
+}
+
+.navLink:hover,
+.navLinkActive {
+  color: #3db8ff;
+}
+
+.navBottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+}
+
+.navBottom .navLink {
+  margin-bottom: 0;
+}
+
+/* ===== Main layout ===== */
+
+.main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 25px;
+  padding: 25px;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 36px;
+  padding: 30px;
+}
+
+/* ===== Left panel (weather, as on Home) ===== */
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchBox {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.searchInput {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 15px 45px;
+  border-radius: 20px;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.mainIcon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 15px;
+}
+
+.bigTemp {
+  font-size: 72px;
+  font-weight: 200;
+  line-height: 1;
+  margin: 10px 0;
+}
+
+.cityName {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.condition {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.forecastBlock {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+}
+
+.forecastTitle {
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+.forecastItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 20px;
+}
+
+.forecastItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dayName {
+  width: 110px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.iconBox {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBox svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tempRange {
+  flex: 1;
+  text-align: right;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ===== Right side ===== */
+
+.rightSide {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ===== Profile header card ===== */
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.avatarWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3db8ff, #123a56);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 700;
+  box-shadow: 0 0 0 4px rgba(61, 184, 255, 0.2);
+}
+
+.avatarEdit {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffb800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 4px #0c0d10;
+}
+
+.avatarEdit svg {
+  width: 13px;
+  height: 13px;
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 180px;
+}
+
+.profileName {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profileEmail {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+}
+
+.profileMeta {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 184, 0, 0.15);
+  color: #ffb800;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.badge svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+
+.profileSide {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+}
+
+.statsRow {
+  display: flex;
+  gap: 12px;
+}
+
+.statCard {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 18px;
+  padding: 14px 20px;
+  text-align: center;
+  min-width: 90px;
+}
+
+.statCard b {
+  display: block;
+  font-size: 26px;
+  font-weight: 200;
+}
+
+.statCard span {
+  display: block;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.headerButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.btnPrimary {
+  padding: 11px 18px;
+  background: #3db8ff;
+  color: #000;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  font-family: inherit;
+}
+
+.btnDark {
+  padding: 11px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  font-family: inherit;
+}
+
+/* ===== Three columns grid ===== */
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* favourite cities */
+
+.favItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 10px;
+}
+
+.favItem svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.favName {
+  flex: 1;
+  min-width: 0;
+}
+
+.favName b {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.favName span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.favTemp {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* notifications */
+
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.toggleRow:last-child {
+  border-bottom: none;
+}
+
+.toggleText b {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.toggleText span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.switch {
+  width: 40px;
+  height: 23px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.switchOn {
+  background: #3db8ff;
+}
+
+.switchOn::after {
+  left: 20px;
+}
+
+/* settings column */
+
+.settingsCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingGroup {
+  margin-bottom: 18px;
+}
+
+.settingLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.segmented {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.segmentBtn {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.segmentOn {
+  background: #3db8ff;
+  color: #000;
+}
+
+.select {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.settingsFooter {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.btnFooter {
+  flex: 1;
+  padding: 11px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: none;
+  font-family: inherit;
+}
+
+.btnFooterDanger {
+  color: #ff8a8a;
+}
+
+@media (max-width: 1050px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .profileHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profileSide {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
