@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Auth.module.css';
 
-
 const CloudLogoIcon = () => (
   <svg className={styles.logoIcon} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.6" width="24" height="24">
     <path d="M18 10h-1.3A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
@@ -25,9 +24,31 @@ const EyeOffIcon = () => (
 );
 
 export default function AuthPage() {
-  // Залишаємо лише візуальну логіку (показати/сховати пароль)
   const [showPassword, setShowPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // Перемикач Вхід/Реєстрація для вигляду
+  const [isLogin, setIsLogin] = useState(true); 
+
+  // Додаємо стани для зчитування тексту з полів
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Функція, яка спрацьовує при натисканні на кнопку
+  const handleAuthSubmit = (e) => {
+    e.preventDefault(); // Зупиняємо перезавантаження сторінки
+
+    // Перевіряємо, чи заповнені поля
+    if (!isLogin && name.trim() === '') {
+      alert('Будь ласка, введіть ваше ім\'я!');
+      return;
+    }
+    if (email.trim() === '' || password.trim() === '') {
+      alert('Будь ласка, заповніть email та пароль!');
+      return;
+    }
+
+    // Якщо все заповнено — показуємо заглушку викладача
+    alert('Авторизація тимчасово недоступна');
+  };
 
   return (
     <div className={styles.page}>
@@ -44,16 +65,19 @@ export default function AuthPage() {
             : 'Кілька секунд — і твій прогноз завжди під рукою'}
         </p>
 
-        <form>
+        {/* Додаємо onSubmit на форму */}
+        <form onSubmit={handleAuthSubmit}>
           {!isLogin && (
             <div className={styles.field}>
               <label className={styles.label} htmlFor="auth-name">Ім'я</label>
               <div className={styles.inputBox}>
-                <input
-                  id="auth-name"
-                  className={styles.input}
-                  type="text"
-                  placeholder="Марія Ковальчук"
+                <input 
+                  id="auth-name" 
+                  className={styles.input} 
+                  type="text" 
+                  placeholder="Марія Ковальчук" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
             </div>
@@ -62,11 +86,13 @@ export default function AuthPage() {
           <div className={styles.field}>
             <label className={styles.label} htmlFor="auth-email">Email</label>
             <div className={styles.inputBox}>
-              <input
-                id="auth-email"
-                className={styles.input}
-                type="email"
-                placeholder="maria@gmail.com"
+              <input 
+                id="auth-email" 
+                className={styles.input} 
+                type="email" 
+                placeholder="maria@gmail.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -79,12 +105,10 @@ export default function AuthPage() {
                 className={styles.input}
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <button
-                type="button"
-                className={styles.eyeButton}
-                onClick={() => setShowPassword(!showPassword)}
-              >
+              <button type="button" className={styles.eyeButton} onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
             </div>
@@ -96,15 +120,18 @@ export default function AuthPage() {
             </div>
           )}
 
-          {/* Замість submit робимо просте посилання на головну сторінку, як вимагає лаба */}
-          <Link to="/home" className={styles.btnPrimary} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+          <button 
+            type="submit" 
+            className={styles.btnPrimary} 
+            style={{ width: '100%', display: 'block', textAlign: 'center', cursor: 'pointer', border: 'none' }}
+          >
             {isLogin ? 'Увійти' : 'Зареєструватися'}
-          </Link>
+          </button>
         </form>
 
         <div className={styles.divider}>або</div>
 
-        <button type="button" className={styles.btnSocial}>
+        <button type="button" className={styles.btnSocial} onClick={() => alert('Вхід через Google тимчасово недоступний')}>
           <span className={styles.googleIcon}>G</span>
           Продовжити з Google
         </button>

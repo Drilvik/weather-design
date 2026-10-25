@@ -44,7 +44,7 @@ function Sidebar() {
         </svg>
       </Link>
 
-      <Link to="/calendar" className={styles.navLink}>
+      <Link to="/forecast" className={styles.navLink}>
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M7 1.5v2H5A2.5 2.5 0 0 0 2.5 6v13A2.5 2.5 0 0 0 5 21.5h14a2.5 2.5 0 0 0 2.5-2.5V6A2.5 2.5 0 0 0 19 3.5h-2v-2h-2v2H9v-2zM4.5 9h15v10a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5z" />
         </svg>
