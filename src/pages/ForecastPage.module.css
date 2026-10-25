@@ -10,8 +10,6 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* ===== Sidebar ===== */
-
 .sidebar {
   width: 85px;
   background: rgba(0, 0, 0, 0.5);
@@ -53,7 +51,6 @@
   margin-bottom: 0;
 }
 
-/* ===== Main layout ===== */
 
 .main {
   flex: 1;
@@ -72,7 +69,6 @@
   padding: 30px;
 }
 
-/* ===== Left panel (weather, same as Home) ===== */
 
 .leftPanel {
   display: flex;
@@ -177,7 +173,6 @@
   font-size: 14px;
 }
 
-/* ===== Right side / forecast ===== */
 
 .rightSide {
   display: flex;

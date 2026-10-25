@@ -27,16 +27,13 @@ export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLogin, setIsLogin] = useState(true); 
 
-  // Додаємо стани для зчитування тексту з полів
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Функція, яка спрацьовує при натисканні на кнопку
   const handleAuthSubmit = (e) => {
-    e.preventDefault(); // Зупиняємо перезавантаження сторінки
+    e.preventDefault();
 
-    // Перевіряємо, чи заповнені поля
     if (!isLogin && name.trim() === '') {
       alert('Будь ласка, введіть ваше ім\'я!');
       return;
@@ -46,7 +43,6 @@ export default function AuthPage() {
       return;
     }
 
-    // Якщо все заповнено — показуємо заглушку викладача
     alert('Авторизація тимчасово недоступна');
   };
 
@@ -65,7 +61,6 @@ export default function AuthPage() {
             : 'Кілька секунд — і твій прогноз завжди під рукою'}
         </p>
 
-        {/* Додаємо onSubmit на форму */}
         <form onSubmit={handleAuthSubmit}>
           {!isLogin && (
             <div className={styles.field}>

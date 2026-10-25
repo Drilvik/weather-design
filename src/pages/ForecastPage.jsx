@@ -139,7 +139,6 @@ function WeatherPanel() {
       <div className={styles.forecastBlock}>
         <h4 className={styles.forecastTitle}>Прогноз на 7 днів</h4>
 
-        {/* Контейнер на 3 дні з прихованим ползунком */}
         <div
           style={{
             maxHeight: '165px',

@@ -12,7 +12,6 @@
   color: #fff;
 }
 
-/* Кольорове сяйво на фоні (як у Фігмі) */
 .page::before {
   content: '';
   position: absolute;

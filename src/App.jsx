@@ -13,7 +13,6 @@ const ProtectedRoute = ({ isAuth, children }) => {
 };
 
 function App() {
-  // ОСЬ ТУТ на захисті просто зміни false на true, щоб викладач побачив Профіль
   const isAuth = false;
 
   return (

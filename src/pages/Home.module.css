@@ -10,7 +10,6 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* ===== Sidebar ===== */
 
 .sidebar {
   width: 85px;
@@ -53,7 +52,6 @@
   margin-bottom: 0;
 }
 
-/* ===== Main layout ===== */
 
 .main {
   flex: 1;
@@ -71,7 +69,6 @@
   padding: 30px;
 }
 
-/* ===== Left panel / WeatherPanel ===== */
 
 .leftPanel {
   display: flex;
@@ -177,7 +174,6 @@
   font-size: 14px;
 }
 
-/* ===== Right panel ===== */
 
 .rightPanel {
   display: flex;
@@ -185,7 +181,6 @@
   gap: 25px;
 }
 
-/* ===== StatsGrid ===== */
 
 .statsGrid {
   display: grid;
@@ -282,7 +277,6 @@
   text-align: center;
 }
 
-/* ===== WeatherMap ===== */
 
 .mapContainer {
   flex: 1;
