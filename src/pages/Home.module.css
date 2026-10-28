@@ -1,0 +1,345 @@
+.page {
+  display: flex;
+  min-height: 100vh;
+  background: 
+    radial-gradient(circle at 25% 20%, rgba(45, 65, 80, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(70, 50, 40, 0.4) 0%, transparent 50%),
+    #050608;
+  background-attachment: fixed;
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ===== Sidebar ===== */
+
+.sidebar {
+  width: 85px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 50px;
+  color: #fff;
+}
+
+.navLink {
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 35px;
+  display: block;
+}
+
+.navLink:hover,
+.navLinkActive {
+  color: #3db8ff;
+}
+
+.navBottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+}
+
+.navBottom .navLink {
+  margin-bottom: 0;
+}
+
+/* ===== Main layout ===== */
+
+.main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 25px;
+  padding: 25px;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(50px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 40px;
+  padding: 30px;
+}
+
+/* ===== Left panel / WeatherPanel ===== */
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.searchBox {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.searchInput {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 15px 45px;
+  border-radius: 20px;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.mainIcon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 15px;
+}
+
+.bigTemp {
+  font-size: 88px;
+  font-weight: 200;
+  line-height: 1;
+  margin: 20px 0;
+}
+
+.cityName {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.condition {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.forecastBlock {
+  margin-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 25px;
+}
+
+.forecastTitle {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.forecastItem {
+  display: flex;
+  align-items: center;
+  padding: 16px 12px;
+  border-radius: 20px;
+}
+
+.forecastItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dayName {
+  width: 125px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.iconBox {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBox svg {
+  width: 30px;
+  height: 30px;
+}
+
+.tempRange {
+  flex: 1;
+  text-align: right;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ===== Right panel ===== */
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ===== StatsGrid ===== */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.statLabel {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.windValue {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.windChart {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uvBox {
+  position: relative;
+  width: 120px;
+  height: 75px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.uvArc {
+  fill: none;
+  stroke: #3db8ff;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 126;
+  stroke-dashoffset: 110;
+}
+
+.uvNum {
+  position: absolute;
+  bottom: -5px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.sunPath {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+  position: relative;
+  margin-top: 55px;
+}
+
+.sunNode {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #ffb800;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #ffb800;
+  top: -6px;
+  left: 70%;
+}
+
+.sunIcon {
+  position: absolute;
+  left: 0;
+  top: -35px;
+  width: 28px;
+}
+
+.moonIcon {
+  position: absolute;
+  right: 0;
+  top: -35px;
+  width: 28px;
+  filter: drop-shadow(0 0 10px #fff);
+}
+
+.sunCount {
+  margin-top: 30px;
+  font-size: 11px;
+  color: #3db8ff;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ===== WeatherMap ===== */
+
+.mapContainer {
+  flex: 1;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  min-height: 250px;
+  background: #0d0e12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+}
+
+@media (max-width: 1000px) {
+  .page {
+    height: auto;
+  }
+
+  .main {
+    grid-template-columns: 1fr;
+    padding: 15px;
+    padding-bottom: 90px;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 70px;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    justify-content: space-around;
+    padding: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .navBottom {
+    flex-direction: row;
+    margin: 0;
+    gap: 20px;
+  }
+
+  .navLink {
+    margin-bottom: 0;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mapContainer {
+    min-height: 300px;
+  }
+}
