@@ -2,16 +2,24 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const WeatherContext = createContext();
 
-const API_BASE_URL = 'https://6af4549955a1de7dcf03def9.mockapi.io/api/v1';
+const API_BASE_URL = 'http://localhost:5000/api';
 
-// Універсальне витягнення назви міста з рядка або об'єкта будь-якої структури
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
+
+
 const getCityNameFromObj = (obj) => {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
   return obj.name || obj.cityName || obj.city || '';
 };
 
-// Нормалізація назви міста для порівняння ("Ужгород, UA" -> "ужгород")
+
 const cleanCityName = (cityInput) => {
   const name = getCityNameFromObj(cityInput);
   if (!name) return '';
@@ -34,13 +42,23 @@ export const WeatherProvider = ({ children }) => {
 
   useEffect(() => {
     async function loadInitialData() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
 
-        const userRes = await fetch(`${API_BASE_URL}/users/1`);
+        const userRes = await fetch(`${API_BASE_URL}/users/me`, {
+          headers: getAuthHeaders(),
+        });
+
         if (userRes.ok) {
           const userData = await userRes.json();
           setUserProfile(userData);
+          localStorage.setItem('user', JSON.stringify(userData));
 
           if (userData.tempUnit) setTempUnitState(userData.tempUnit);
           if (userData.windUnit) setWindUnitState(userData.windUnit);
@@ -53,36 +71,14 @@ export const WeatherProvider = ({ children }) => {
               lon: Number(userData.lon),
             });
           }
-        } else if (userRes.status === 404) {
-          const initialUser = {
-            username: 'dariia.lavriuk',
-            email: 'dariia@example.com',
-            tempUnit: 'C',
-            windUnit: 'kmh',
-            cityName: 'Ужгород',
-            country: 'Україна',
-            lat: 48.62,
-            lon: 22.28,
-            notifRain: true,
-            notifWind: true,
-            notifMorning: true,
-            notifUv: false,
-            avatar: '',
-          };
-
-          const createRes = await fetch(`${API_BASE_URL}/users`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(initialUser),
-          });
-
-          if (createRes.ok) {
-            const createdUser = await createRes.json();
-            setUserProfile(createdUser);
-          }
+        } else {
+          console.error('Помилка завантаження профілю:', userRes.status);
         }
 
-        const favRes = await fetch(`${API_BASE_URL}/favorites`);
+        const favRes = await fetch(`${API_BASE_URL}/favorites`, {
+          headers: getAuthHeaders(),
+        });
+
         if (favRes.ok) {
           const favData = await favRes.json();
           const normalizedFavs = Array.isArray(favData)
@@ -103,6 +99,37 @@ export const WeatherProvider = ({ children }) => {
     loadInitialData();
   }, []);
 
+  const updateUserOnServer = async (updates) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Сесія не знайдена. Натисніть «Вийти» і увійдіть у свій акаунт знову.');
+      return null;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/me`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updates),
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          alert('Термін сесії вийшов. Натисніть «Вийти» і увійдіть у свій акаунт заново.');
+        }
+        return null;
+      }
+
+      const updatedUser = await res.json();
+      setUserProfile(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return updatedUser;
+    } catch (err) {
+      console.error('Помилка оновлення профілю на сервері:', err);
+      return null;
+    }
+  };
+
   const setCity = async (newCity) => {
     if (!newCity) return;
     const cityNameRaw = getCityNameFromObj(newCity);
@@ -117,19 +144,13 @@ export const WeatherProvider = ({ children }) => {
 
     setCityState(formattedCity);
 
-    try {
-      await fetch(`${API_BASE_URL}/users/1`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cityName: formattedCity.name,
-          country: formattedCity.country,
-          lat: String(formattedCity.lat),
-          lon: String(formattedCity.lon),
-        }),
+    if (localStorage.getItem('token')) {
+      await updateUserOnServer({
+        cityName: formattedCity.name,
+        country: formattedCity.country,
+        lat: String(formattedCity.lat),
+        lon: String(formattedCity.lon),
       });
-    } catch (err) {
-      console.error('Помилка оновлення міста:', err);
     }
   };
 
@@ -146,12 +167,16 @@ export const WeatherProvider = ({ children }) => {
     if (!rawName) return;
 
     const targetName = rawName.split(',')[0].trim();
-
     if (isFavorite(targetName)) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Щоб зберігати улюблені міста, натисніть «Вийти» і увійдіть у свій акаунт.');
+      return;
+    }
 
     const tempId = Date.now().toString();
     const newFavObj = {
-      userId: '1',
       name: targetName,
       cityName: targetName,
       country: cityToAdd.country || '',
@@ -161,13 +186,12 @@ export const WeatherProvider = ({ children }) => {
 
     const tempFav = { ...newFavObj, id: tempId };
 
-    // Фіксуємо місто в UI
     setFavoriteCities((prev) => [...prev, tempFav]);
 
     try {
       const res = await fetch(`${API_BASE_URL}/favorites`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newFavObj),
       });
 
@@ -180,8 +204,11 @@ export const WeatherProvider = ({ children }) => {
         setFavoriteCities((prev) =>
           prev.map((item) => (item.id === tempId ? normalizedSaved : item))
         );
+      } else {
+        setFavoriteCities((prev) => prev.filter((item) => item.id !== tempId));
       }
     } catch (err) {
+      setFavoriteCities((prev) => prev.filter((item) => item.id !== tempId));
       console.error('Помилка відправки в улюблені:', err);
     }
   };
@@ -194,7 +221,7 @@ export const WeatherProvider = ({ children }) => {
 
     const existing = favoriteCities.find((c) => cleanCityName(c) === target);
 
-    // Оптимістично видаляємо з UI
+   
     setFavoriteCities((prev) =>
       prev.filter((item) => cleanCityName(item) !== target)
     );
@@ -203,6 +230,7 @@ export const WeatherProvider = ({ children }) => {
       try {
         await fetch(`${API_BASE_URL}/favorites/${existing.id}`, {
           method: 'DELETE',
+          headers: getAuthHeaders(),
         });
       } catch (err) {
         console.error('Помилка видалення з улюблених:', err);
@@ -222,59 +250,23 @@ export const WeatherProvider = ({ children }) => {
 
   const setTempUnit = async (unit) => {
     setTempUnitState(unit);
-    try {
-      await fetch(`${API_BASE_URL}/users/1`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tempUnit: unit }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await updateUserOnServer({ tempUnit: unit });
   };
 
   const setWindUnit = async (unit) => {
     setWindUnitState(unit);
-    try {
-      await fetch(`${API_BASE_URL}/users/1`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ windUnit: unit }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await updateUserOnServer({ windUnit: unit });
   };
 
   const toggleNotification = async (key, currentValue) => {
     const updatedValue = !currentValue;
-    if (userProfile) {
-      setUserProfile((prev) => ({ ...prev, [key]: updatedValue }));
-    }
-    try {
-      await fetch(`${API_BASE_URL}/users/1`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ [key]: updatedValue }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    setUserProfile((prev) => ({ ...(prev || {}), [key]: updatedValue }));
+    await updateUserOnServer({ [key]: updatedValue });
   };
 
   const updateAvatar = async (base64Image) => {
-    if (userProfile) {
-      setUserProfile((prev) => ({ ...prev, avatar: base64Image }));
-    }
-    try {
-      await fetch(`${API_BASE_URL}/users/1`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ avatar: base64Image }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    setUserProfile((prev) => ({ ...(prev || {}), avatar: base64Image }));
+    await updateUserOnServer({ avatar: base64Image });
   };
 
   return (

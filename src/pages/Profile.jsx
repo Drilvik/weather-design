@@ -290,14 +290,32 @@ function ProfileHeader() {
   const { favoriteCities, userProfile, updateAvatar } = useWeather();
   const fileInputRef = useRef(null);
 
-  const username = userProfile?.username || localStorage.getItem('username') || 'dariia.lavriuk';
-  const badge = userProfile?.badge || localStorage.getItem('userBadge') || '★ Premium';
-  const email = userProfile?.email || 'dariia@example.com';
-  const location = userProfile?.location || 'Ужгород, Україна';
+  let storedUser = null;
+  try {
+    storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+  } catch {
+    storedUser = null;
+  }
+
+  const username =
+    userProfile?.name ||
+    userProfile?.username ||
+    storedUser?.name ||
+    localStorage.getItem('username') ||
+    'Користувач';
+
+  const badge = userProfile?.badge || storedUser?.badge || localStorage.getItem('userBadge') || '★ Premium';
+  const email = userProfile?.email || storedUser?.email || '';
+  const location =
+    userProfile?.location ||
+    (userProfile?.cityName
+      ? `${userProfile.cityName}${userProfile.country ? `, ${userProfile.country}` : ''}`
+      : 'Ужгород, Україна');
   const joinedYear = userProfile?.joinedYear || '2026';
 
   const initials = username
     .split(' ')
+    .filter(Boolean)
     .map((word) => word[0])
     .join('')
     .substring(0, 2)
@@ -336,13 +354,14 @@ function ProfileHeader() {
       <div 
         className={styles.avatarWrap} 
         onClick={handleAvatarClick} 
-        style={{ cursor: 'pointer', overflow: 'hidden' }}
+        style={{ cursor: 'pointer' }}
       >
         {userProfile?.avatar ? (
           <img
             src={userProfile.avatar}
             alt="Avatar"
-            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+            className={styles.avatar}
+            style={{ objectFit: 'cover', display: 'block', padding: 0 }}
           />
         ) : (
           <div className={styles.avatar}>{initials}</div>

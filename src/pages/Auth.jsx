@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import styles from './Auth.module.css';
 
@@ -26,46 +26,40 @@ const EyeOffIcon = () => (
 
 export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); 
+  const [isLogin, setIsLogin] = useState(true);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Дістаємо login та стан isLoading з нашого оновленого хука
-  const { login, isLoading } = useAuth();
-  const navigate = useNavigate();
+  const { login, register, isLoading } = useAuth();
 
-  // Робимо функцію асинхронною
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. Валідація імені (тільки для реєстрації)
     if (!isLogin && name.trim() === '') {
-      alert('Будь ласка, введіть ваше ім\'я!');
+      alert("Будь ласка, введіть ваше ім'я!");
       return;
     }
-    
-    // 2. Валідація Email (обов'язково має бути @)
+
+
     if (!email.includes('@')) {
       alert('Будь ласка, введіть коректний email (має містити @)!');
       return;
     }
 
-    // 3. Валідація пароля (мінімум 8 символів)
     if (password.length < 8) {
       alert('Пароль має містити щонайменше 8 символів!');
       return;
     }
 
-    // Формуємо ім'я: при вході беремо логін до символу @, при реєстрації — введене ім'я
-    const usernameToSave = isLogin ? email.split('@')[0] : name; 
-    
-    // Авторизація через кастомний хук useAuth (чекаємо на імітацію сервера)
-    const success = await login(usernameToSave, password);
+    const success = isLogin
+      ? await login(email.trim(), password)
+      : await register(name.trim(), email.trim(), password);
 
     if (success) {
-      navigate('/home'); // Перенаправлення на головну сторінку після успішного входу
+      
+      window.location.href = '/home';
     }
   };
 
@@ -89,11 +83,11 @@ export default function AuthPage() {
             <div className={styles.field}>
               <label className={styles.label} htmlFor="auth-name">Ім'я</label>
               <div className={styles.inputBox}>
-                <input 
-                  id="auth-name" 
-                  className={styles.input} 
-                  type="text" 
-                  placeholder="Марія Ковальчук" 
+                <input
+                  id="auth-name"
+                  className={styles.input}
+                  type="text"
+                  placeholder="Марія Ковальчук"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -104,11 +98,11 @@ export default function AuthPage() {
           <div className={styles.field}>
             <label className={styles.label} htmlFor="auth-email">Email</label>
             <div className={styles.inputBox}>
-              <input 
-                id="auth-email" 
-                className={styles.input} 
-                type="email" 
-                placeholder="maria@gmail.com" 
+              <input
+                id="auth-email"
+                className={styles.input}
+                type="email"
+                placeholder="maria@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -126,7 +120,11 @@ export default function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button type="button" className={styles.eyeButton} onClick={() => setShowPassword(!showPassword)}>
+              <button
+                type="button"
+                className={styles.eyeButton}
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
             </div>
@@ -138,26 +136,30 @@ export default function AuthPage() {
             </div>
           )}
 
-          <button 
-            type="submit" 
-            className={styles.btnPrimary} 
+          <button
+            type="submit"
+            className={styles.btnPrimary}
             disabled={isLoading}
-            style={{ 
-              width: '100%', 
-              display: 'block', 
-              textAlign: 'center', 
-              cursor: isLoading ? 'wait' : 'pointer', 
-              border: 'none', 
-              opacity: isLoading ? 0.7 : 1 
+            style={{
+              width: '100%',
+              display: 'block',
+              textAlign: 'center',
+              cursor: isLoading ? 'wait' : 'pointer',
+              border: 'none',
+              opacity: isLoading ? 0.7 : 1,
             }}
           >
-            {isLoading ? 'Зачекайте...' : (isLogin ? 'Увійти' : 'Зареєструватися')}
+            {isLoading ? 'Зачекайте...' : isLogin ? 'Увійти' : 'Зареєструватися'}
           </button>
         </form>
 
         <div className={styles.divider}>або</div>
 
-        <button type="button" className={styles.btnSocial} onClick={() => alert('Вхід через Google тимчасово недоступний')}>
+        <button
+          type="button"
+          className={styles.btnSocial}
+          onClick={() => alert('Вхід через Google тимчасово недоступний')}
+        >
           <span className={styles.googleIcon}>G</span>
           Продовжити з Google
         </button>
@@ -166,14 +168,24 @@ export default function AuthPage() {
           {isLogin ? (
             <>
               Немає акаунта?{' '}
-              <button type="button" className={styles.switchLink} onClick={() => setIsLogin(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}>
+              <button
+                type="button"
+                className={styles.switchLink}
+                onClick={() => setIsLogin(false)}
+                style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+              >
                 Зареєструватися
               </button>
             </>
           ) : (
             <>
               Вже є акаунт?{' '}
-              <button type="button" className={styles.switchLink} onClick={() => setIsLogin(true)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}>
+              <button
+                type="button"
+                className={styles.switchLink}
+                onClick={() => setIsLogin(true)}
+                style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+              >
                 Увійти
               </button>
             </>
